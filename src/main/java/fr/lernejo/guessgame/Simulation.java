@@ -34,9 +34,26 @@ public class Simulation {
         return false;
     }
 
-    public void loopUntilPlayerSucceed() {
-        while (!nextRound()) {
-            // Continue until the player guesses the correct number
+    public void loopUntilPlayerSucceed(long maxIterations) {
+        long startTime = System.currentTimeMillis();
+        long iterations = 0;
+        boolean success = false;
+
+        while (iterations < maxIterations && !success) {
+            success = nextRound();
+            iterations++;
+        }
+
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
+        long minutes = duration / 60000;
+        long seconds = (duration % 60000) / 1000;
+        long millis = duration % 1000;
+
+        if (success) {
+            logger.log(String.format("You won! Time taken: %02d:%02d.%03d", minutes, seconds, millis));
+        } else {
+            logger.log(String.format("You lost! Time taken: %02d:%02d.%03d", minutes, seconds, millis));
         }
     }
 }
